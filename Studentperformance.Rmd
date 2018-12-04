@@ -6,8 +6,8 @@ knit: (function(input_file, encoding) {
  encoding=encoding,
  output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
 author: "Drey Upsher-Obear"
-output: github_document
----
+output: html_document
+--- 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
