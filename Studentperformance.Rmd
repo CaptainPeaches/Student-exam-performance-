@@ -1,0 +1,94 @@
+---
+title: "Student test performance"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Setup
+
+```{r, echo=FALSE}
+library(tidyverse)
+library(DescTools)
+library(DataExplorer)
+```
+
+# Data 
+
+Load data, check structure for variable types. 
+
+```{r}
+dat <- read.csv("StudentsPerformance.csv", sep = ",", stringsAsFactors = TRUE)
+
+str(dat)
+```
+
+
+## Implied correlation
+
+Using the wonderful DataExplorer package, lets check the distribution of our variables. 
+
+```{r variable-dist, echo=FALSE}
+plot_intro(dat)
+```
+
+A bit of a unicorn, no missing observations and no missing columns. Very little cleaning is necessary.
+
+Now lets check for correlation between variables. 
+
+```{r}
+dat %>%
+  plot_correlation(maxcat = 4)
+```
+
+Interesting, we have a pretty good idea of what to expect correlation wise with the variables.
+
+## Question 1
+
+Do students with mor educated parents have higher reading, writing, and mathematics scores? Are they more likely to study for the test given this?  
+
+Step 1: organize data into a more readable form, then plot. Examining reading score first. I didn't want to reorganize the DF into a long form, so I will plot the 3 scores on separate plots. This will change eventually to a faceted graph. 
+
+```{r parents-degree}
+par.edu <- dat %>%
+  group_by(parental.level.of.education) %>%
+  summarise(avg_mat = mean(math.score),
+            avg_writ = mean(writing.score),
+            avg_read = mean(reading.score))
+
+par.edu 
+
+```
+
+Plot for reading score. 
+
+```{r reading-plot}
+dat %>%
+  ggplot(aes(parental.level.of.education, fill = parental.level.of.education)) + 
+  geom_violin(aes(x = reorder(parental.level.of.education, -reading.score), y = reading.score)) + 
+  coord_flip()
+```
+
+Plot for writing score.
+
+```{r writing-plot}
+dat %>%
+  ggplot(aes(parental.level.of.education, fill = parental.level.of.education)) + 
+  geom_violin(aes(x = reorder(parental.level.of.education, -writing.score), y = writing.score)) + 
+  coord_flip()
+```
+
+Plot for mathematics score. 
+
+```{r math-plot}
+dat %>%
+  ggplot(aes(parental.level.of.education, fill = parental.level.of.education)) + 
+  geom_violin(aes(x = reorder(parental.level.of.education, -math.score), y = math.score)) + 
+  coord_flip()
+```
+
+# Conclusion for question 1
+
+From these plots, it would be plausible to accept our hypothesis. Students that have more educated parents do indeed score higher on reading, writing, and mathematics testing. 
