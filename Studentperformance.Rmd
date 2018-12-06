@@ -25,7 +25,7 @@ library(DataExplorer)
 
 Load data, check structure for variable types. 
 
-```{r}
+```{r dat-load}
 dat <- read.csv("StudentsPerformance.csv", sep = ",", stringsAsFactors = TRUE)
 
 str(dat)
@@ -44,7 +44,7 @@ A bit of a unicorn, no missing observations and no missing columns. Very little 
 
 Now lets check for correlation between variables. 
 
-```{r}
+```{r correlation}
 dat %>%
   plot_correlation(maxcat = 4)
 ```
@@ -95,6 +95,38 @@ dat %>%
   coord_flip()
 ```
 
-# Conclusion for question 1
+From these plots, it makes sense to accept our hypothesis. Students that have more educated parents do indeed score higher on reading, writing, and mathematics testing. However, how do we control for the study variable? (IE, prepared or not for test). 
 
-From these plots, it would be plausible to accept our hypothesis. Students that have more educated parents do indeed score higher on reading, writing, and mathematics testing. 
+## Question 2
+
+Do students that have free or reduced lunch score better or worse on average than those who have a secure pantry? 
+
+Math scores first. 
+
+```{r lunch-math}
+dat %>% 
+  ggplot(aes(x = lunch, y = math.score, fill = lunch)) +
+  geom_violin() +
+  coord_flip()
+```
+
+Reading scores second. 
+
+```{r lunch-reading}
+dat %>% 
+  ggplot(aes(x = lunch, y = reading.score, fill = lunch)) +
+  geom_violin() +
+  coord_flip()
+```
+
+Writing score last. 
+
+```{r lunch-write}
+dat %>% 
+  ggplot(aes(x = lunch, y = writing.score, fill = lunch)) +
+  geom_violin() +
+  coord_flip()
+```
+## Question 2 conclusion
+
+I think it would be very safe to say that students that get free/reduced lunch not only perform slightly worse, but also have a greater range of possible scores on testing. 
