@@ -127,6 +127,7 @@ dat %>%
   geom_violin() +
   coord_flip()
 ```
+
 ## Question 2 conclusion
 
 I think it would be very safe to say that students that get free/reduced lunch not only perform slightly worse, but also have a greater range of possible scores on testing. 
